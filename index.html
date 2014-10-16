@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="Node Forward">
+    <meta name="description" content="Node Forward is a broad community effort to improve Node, JavaScript, and their ecosystem through open collaboration.">
+    <meta name="keywords" content="node-forward, node forward, node, node.js, node.js forward, nodejs, nodejs forward, javascript">
     <meta name="author" content="Mikeal Rogers">
 
     <title>Node Forward</title>
@@ -16,53 +17,102 @@
     <link href='http://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic' rel='stylesheet' type='text/css'>
 
     <style>
-    html {
-      font-family: 'Lato', sans-serif;
-      font-weight:300;
-    }
-    img#logo {
-      width:30%;
-    }
-    div#header {
-      text-align:center;
-      margin-left:30%;
-      margin-right:30%;
-    }
-    p.header {
-      font-size:200%;
-    }
-    div#content {
-      margin-left:30%;
-      margin-right:30%;
-    }
-    div#content {
-      font-size:110%;
-    }
-    p.description {
-      font-weight:400;
-    }
+      html {
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+        font-size: 16px;
+      }
+      body {
+        opacity: 0;
+        transition: opacity 0.1s linear;
+      }
+      body.loaded {
+        opacity: 1;
+      }
+      img#logo {
+        width: 30%;
+      }
+      div#header {
+        position: relative;
+        text-align: center;
+        margin: 0 auto;
+        padding: 0 16px;
+        max-width: 512px;
+      }
+      p.header {
+        font-size: 2em;
+      }
+      #header .header {
+        margin: 0 0 2.4em;
+      }
+      div#content {
+        margin: 0 auto;
+        padding: 0 12px;
+        max-width: 512px;
+      }
+      div#content {
+        font-size: 1.1em;
+      }
+      p.description {
+        font-weight: 400;
+      }
+      p.splash {
+        position: absolute;
+        bottom: -2em;
+        left: 0;
+        right: 0;
+        font-size: 0.7em;
+        margin: 0;
+        color: #9e9e9e;
+        font-style: italic;
+      }
     </style>
 
   </head>
 
-  <body>
+  <body id="body">
     <div id="header">
       <img id="logo" src="node-forward.png">
       <p class="header">Node Forward</p>
+      <p class="splash"><code id="splash"></code></p>
     </div>
     <div id="content">
       <p class="description">Node Forward is a broad community effort to improve Node, JavaScript, and their ecosystem through open collaboration.</p>
       <p>Node's growth has been staggering. This growth has also led to a series of new issues that occur naturally when a community reaches a new scale.</p>
       <p>Some problems require broader ownership and contributorship than have traditionally been applied, while others are so dispersed between tiny projects that they require new collaborative space to grow. Node Forward is a place where the collaboration necessary to solve these issues can take place.</p>
       <p class="header">Current Efforts</p>
-      <p><a href="https://github.com/node-forward/welcome"><code>welcome</code></a> is building a better entry point for people new to Node and JavaScript.</p>
-      <p><a href="https://github.com/node-forward/help"><code>help</code></a> is for anyone who needs help with anything JavaScript and Node.</p>
-      <p><a href="https://github.com/node-forward/build"><code>build</code></a> is creating better tools and infrastructure for building node and running tests.</p>
-      <p><a href="https://github.com/node-forward/roadmap"><code>roadmap</code></a> is finding ways to gather feedback from the larger community about the direction of Node and JavaScript to inform those building Node and working on standards of the needs of the community.</p>
-      <p>All other conversations, including those around proposed new Node Forward efforts are happening on <a href="https://github.com/node-forward/discussions/"><code>discussions</code></a>. One particularly interesting conversation is about better support for <a href="https://github.com/node-forward/discussions/issues/1">advanced mathematics</a>.</p>
+      <p><a href="https://github.com/node-forward/welcome"><code>welcome</code></a> - building a better entry point for people new to Node and JavaScript.</p>
+      <p><a href="https://github.com/node-forward/help"><code>help</code></a> - for anyone who needs help with anything JavaScript and Node.</p>
+      <p><a href="https://github.com/node-forward/build"><code>build</code></a> - creating better tools and infrastructure for building node and running tests.</p>
+      <p><a href="https://github.com/node-forward/roadmap"><code>roadmap</code></a> - finding ways to gather feedback from the larger community about the direction of Node and JavaScript to inform those building Node and working on standards of the needs of the community.</p>
+      <p>All other conversations, including those around proposed new Node Forward efforts are happening in <a href="https://github.com/node-forward/discussions/"><code>discussions</code></a>. One particularly interesting conversation is about better support for <a href="https://github.com/node-forward/discussions/issues/1">advanced mathematics</a>.</p>
       <p>There are also other community driven efforts you may be interested in. <a href="http://nodeschool.io/">NodeSchool</a> is a community building free educational workshops and running free and low-cost instructional meetups around the world. <a href="http://oneshot.nodeconf.com/">NodeConf ONE-SHOT</a> is a simple one day forkable conference anyone in the community can run in the world.</p>
       <p class="header">Who is Node Forward?</p>
       <p>Most importantly, Node Forward is <strong>you</strong>. Node Forward is anyone who wants to take responsibility for a problem and work together to fix it. All help is welcome so long as you're willing to work with others and follow the code of conduct. If you're interested in stepping up to moderate some of the repositories simply log an issue and you'll be added.</p>
     </div>
   </body>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded' , function() {
+      // fade in ;D
+      document.getElementById('body').classList.add('loaded')
+
+      // get awesome splash texts of awesomeness.
+      // using superagent because it's node-like and cool.
+      superagent
+      .get('splashes.json')
+      .set('Accept', 'application/json')
+      .end(function(err, res) {
+        if (err) console.log(err)
+        if (!res.ok || !res.body || !res.body.length) {
+          // dunno
+          return
+        }
+
+        var i = (res.body.length * Math.random())>>0 // bitwise floor() magic
+
+        document.getElementById('splash').textContent = res.body[i]
+      })
+    })
+  </script>
 </html>
