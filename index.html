@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -25,6 +25,8 @@
       }
       body {
         opacity: 0;
+      }
+      body.loading {
         transition: opacity 0.1s linear;
       }
       body.loaded {
@@ -89,7 +91,7 @@
 
   </head>
 
-  <body id="body">
+  <body id="body" class="loading">
     <div id="header">
 
       <img id="logo" src="node-forward.png">
@@ -138,6 +140,11 @@
     document.addEventListener('DOMContentLoaded' , function() {
       // fade in ;D
       document.getElementById('body').classList.add('loaded')
+
+      setTimeout(function(){
+        document.getElementById('body').classList.remove('loading')
+      }, 100)
+
 
       // get awesome splash texts of awesomeness.
       // using superagent because it's node-like and cool.
